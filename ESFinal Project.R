@@ -341,6 +341,18 @@ phoenix.monthly$year <- year(phoenix.monthly$year_month)
 phoenix.monthly$month <- month(phoenix.monthly$year_month)
 climate.monthly <- rbind(rome.monthly, phoenix.monthly)
 
+#Combine data for each analysis:
+#NY Comparison:
+
+
+#AZ Comparison
+
+
+#NY vs AZ Comparison
+
+
+
+
 #Comparative Data Analysis----
 #Summary stat - mean
 avg_sken_trans<-mean(sken_dec$x)
