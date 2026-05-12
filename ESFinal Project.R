@@ -221,7 +221,8 @@ ggplot(rome.monthly) +
   labs(
     title = "Monthly Average Temperature (Rome, NY)",
     x = "Month",
-    y = "Temperature (°F)")
+    y = "Temperature (°F)")+
+  theme_classic()
 
 ggplot(rome.monthly) +
   aes(x = year_month, y = total.prcp) +
@@ -229,7 +230,8 @@ ggplot(rome.monthly) +
   labs(
     title = "Monthly Total Precipitation (Rome, NY)",
     x = "Month",
-    y = "Precipitation (inches)")
+    y = "Precipitation (inches)")+
+  theme_classic()
 
 #Phoenix
 ggplot(phoenix.monthly) +
@@ -264,7 +266,7 @@ sken.df <- data.frame(
   random = sken_dec$random
 )
 
-sken.df$name <- rep("Skenandoa (NY)", nrow(sken.df))
+sken.df$Name <- rep("Skenandoa (NY)", nrow(sken.df))
 sken.df$location <- rep("NY", nrow(sken.df))
 
 # 2. Neighbouring Forest
@@ -277,7 +279,7 @@ forest.df <- data.frame(
   random = forest_dec$random
 )
 
-forest.df$name <- rep("Neighbouring Forest", nrow(forest.df))
+forest.df$Name <- rep("Neighbouring Forest", nrow(forest.df))
 forest.df$location <- rep("NY", nrow(forest.df))
 
 # 3. Urban Area - New Hartford
@@ -290,7 +292,7 @@ urban.df <- data.frame(
   random = urban_dec$random
 )
 
-urban.df$name <- rep("Urban Area - New Hartford", nrow(urban.df))
+urban.df$Name <- rep("Urban Area - New Hartford", nrow(urban.df))
 urban.df$location <- rep("NY", nrow(urban.df))
 
 # 4. Phoenix Golf Course - No House, No Desert
@@ -303,7 +305,7 @@ phx_ndh.df <- data.frame(
   random = phx_ndh_dec$random
 )
 
-phx_ndh.df$name <- rep("Phoenix Golf - No House, No Desert", nrow(phx_ndh.df))
+phx_ndh.df$Name <- rep("Phoenix Golf - No House, No Desert", nrow(phx_ndh.df))
 phx_ndh.df$location <- rep("AZ", nrow(phx_ndh.df))
 
 # 5. Phoenix Golf Course with Houses
@@ -315,7 +317,7 @@ houses.df<-data.frame(year=c(rep(seq(2021,2025),each=12),2026,2026,2026,2026),
                       observed=phx_houses_dec$x, 
                       trend=phx_houses_dec$trend,
                       random=phx_houses_dec$random)
-houses.df$name=rep("Phoenix Golf - Houses",nrow(houses.df))
+houses.df$Name=rep("Phoenix Golf - Houses",nrow(houses.df))
 houses.df$location=rep("AZ",nrow(houses.df))
 
 # 6. Phoenix Golf Course - Desert
@@ -328,7 +330,7 @@ phx_des.df <- data.frame(
   random = phx_des_dec$random
 )
 
-phx_des.df$name <- rep("Phoenix Golf - Desert", nrow(phx_des.df))
+phx_des.df$Name <- rep("Phoenix Golf - Desert", nrow(phx_des.df))
 phx_des.df$location <- rep("AZ", nrow(phx_des.df))
 
 #Combine climate data and format to make it easy to refer to in analysis of regions
@@ -341,20 +343,236 @@ phoenix.monthly$year <- year(phoenix.monthly$year_month)
 phoenix.monthly$month <- month(phoenix.monthly$year_month)
 climate.monthly <- rbind(rome.monthly, phoenix.monthly)
 
-#Combine data for each analysis:
-#NY Comparison:
+#Convert decomposition columns from time series to numeric----
+# Skenandoa
+sken.df$seasonal <- as.numeric(sken.df$seasonal)
+sken.df$observed <- as.numeric(sken.df$observed)
+sken.df$trend <- as.numeric(sken.df$trend)
+sken.df$random <- as.numeric(sken.df$random)
+
+# Forest
+forest.df$seasonal <- as.numeric(forest.df$seasonal)
+forest.df$observed <- as.numeric(forest.df$observed)
+forest.df$trend <- as.numeric(forest.df$trend)
+forest.df$random <- as.numeric(forest.df$random)
+
+# Urban
+urban.df$seasonal <- as.numeric(urban.df$seasonal)
+urban.df$observed <- as.numeric(urban.df$observed)
+urban.df$trend <- as.numeric(urban.df$trend)
+urban.df$random <- as.numeric(urban.df$random)
+
+# Phoenix - No House, No Desert
+phx_ndh.df$seasonal <- as.numeric(phx_ndh.df$seasonal)
+phx_ndh.df$observed <- as.numeric(phx_ndh.df$observed)
+phx_ndh.df$trend <- as.numeric(phx_ndh.df$trend)
+phx_ndh.df$random <- as.numeric(phx_ndh.df$random)
+
+# Phoenix - Houses
+houses.df$seasonal <- as.numeric(houses.df$seasonal)
+houses.df$observed <- as.numeric(houses.df$observed)
+houses.df$trend <- as.numeric(houses.df$trend)
+houses.df$random <- as.numeric(houses.df$random)
+
+# Phoenix - Desert
+phx_des.df$seasonal <- as.numeric(phx_des.df$seasonal)
+phx_des.df$observed <- as.numeric(phx_des.df$observed)
+phx_des.df$trend <- as.numeric(phx_des.df$trend)
+phx_des.df$random <- as.numeric(phx_des.df$random)
 
 
-#AZ Comparison
+#Combine data + Visualistion for each analysis----
+#NY Comparison----
+ny.dec.df <- rbind(sken.df, urban.df, forest.df)
+ny.dec.df$date <- make_date( # Creating date from year and month to be able to plot
+  year = ny.dec.df$year,
+  month = ny.dec.df$month,
+  day = 1 #arbitrary / how it was before
+)
+
+#NY Observed ET Comparison
+ggplot(data = ny.dec.df,
+       aes(x = date, y = observed, color = Name)) +
+  geom_line() +
+  labs(
+    title = "Observed Monthly ET: NY Sites",
+    x = "Year",
+    y = "Observed Monthly ET (in)"
+  ) +
+  theme_classic()
+
+#NY Trend ET Comparison
+ggplot(data = ny.dec.df,
+       aes(x = date, y = trend, color = Name)) +
+  geom_line() +
+  labs(
+    title = "Trend Component of ET: NY Sites",
+    x = "Year",
+    y = "Trend Component of ET (in)"
+  ) +
+  theme_classic()
+
+#NY Seasonal ET Comparison
+ggplot(data = ny.dec.df,
+       aes(x = date, y = seasonal, color = Name)) +
+  geom_line() +
+  labs(
+    title = "Seasonal Component of ET: NY Sites",
+    x = "Year",
+    y = "Seasonal Component of ET (in)"
+  ) +
+  theme_classic()
+
+#NY Random ET Comparison
+ggplot(data = ny.dec.df,
+       aes(x = date, y = random, color = Name)) +
+  geom_line() +
+  labs(
+    title = "Random Component of ET: NY Sites",
+    x = "Year",
+    y = "Random Component of ET (in)"
+  ) +
+  theme_classic()
+
+#AZ Comparison----
+az.dec.df<-rbind(houses.df,phx_des.df,phx_ndh.df)
+az.dec.df$date <- make_date(
+  year = az.dec.df$year,
+  month = az.dec.df$month,
+  day = 1
+)
+
+#AZ Observed ET Comparison
+ggplot(data = az.dec.df,
+       aes(x = date, y = observed, color = Name)) +
+  geom_line() +
+  labs(
+    title = "Observed Monthly ET: AZ Sites",
+    x = "Year",
+    y = "Observed Monthly ET (in)"
+  ) +
+  theme_classic()
+
+#AZ Trend ET Comparison
+ggplot(data = az.dec.df,
+       aes(x = date, y = trend, color = Name)) +
+  geom_line() +
+  labs(
+    title = "Trend Component of ET: AZ Sites",
+    x = "Year",
+    y = "Trend Component of ET (in)"
+  ) +
+  theme_classic()
+
+#AZ Seasonal ET Comparison
+ggplot(data = az.dec.df,
+       aes(x = date, y = seasonal, color = Name)) +
+  geom_line() +
+  labs(
+    title = "Seasonal Component of ET: AZ Sites",
+    x = "Year",
+    y = "Seasonal Component of ET (in)"
+  ) +
+  theme_classic()
+
+#AZ Random ET Comparison
+ggplot(data = az.dec.df,
+       aes(x = date, y = random, color = Name)) +
+  geom_line() +
+  labs(
+    title = "Random Component of ET: AZ Sites",
+    x = "Year",
+    y = "Random Component of ET (in)"
+  ) +
+  theme_classic()
+
+#NY vs AZ Comparison----
+ny.az.comp.df<-rbind(sken.df,phx_ndh.df)
+ny.az.comp.df$date <- make_date(
+  year = ny.az.comp.df$year,
+  month = ny.az.comp.df$month,
+  day = 1
+)
+#Observed ET Comparison
+ggplot(data = ny.az.comp.df,
+       aes(x = date, y = observed, color = Name)) +
+  geom_line() +
+  labs(
+    title = "Observed Monthly ET: NY Golf Course vs AZ Golf Course",
+    x = "Year",
+    y = "Observed Monthly ET (in)"
+  ) +
+  theme_classic()
+
+#Trend ET Comparison
+ggplot(data = ny.az.comp.df,
+       aes(x = date, y = trend, color = Name)) +
+  geom_line() +
+  labs(
+    title = "Trend Component of ET: NY Golf Course vs AZ Golf Course",
+    x = "Year",
+    y = "Trend Component of ET (in)"
+  ) +
+  theme_classic()
+
+#Seasonal ET Comparison
+ggplot(data = ny.az.comp.df,
+       aes(x = date, y = seasonal, color = Name)) +
+  geom_line() +
+  labs(
+    title = "Seasonal Component of ET: NY Golf Course vs AZ Golf Course",
+    x = "Year",
+    y = "Seasonal Component of ET (in)"
+  ) +
+  theme_classic()
+
+#Random ET Comparison
+ggplot(data = ny.az.comp.df,
+       aes(x = date, y = random, color = Name)) +
+  geom_line() +
+  labs(
+    title = "Random Component of ET: NY Golf Course vs AZ Golf Course",
+    x = "Year",
+    y = "Random Component of ET (in)"
+  ) +
+  theme_classic()
+
+#Summary stat -----
+#Investigate Linear Relationship between ET and Temperature
+all.dec.df <- rbind(
+  sken.df,
+  urban.df,
+  forest.df,
+  houses.df,
+  phx_des.df,
+  phx_ndh.df
+)
+
+all.dec.df$date <- make_date(
+  year = all.dec.df$year,
+  month = all.dec.df$month,
+  day = 1
+)
 
 
-#NY vs AZ Comparison
+et.climate.df <- left_join(
+  all.dec.df,
+  climate.monthly,
+  by = c("year", "month", "location")
+)
+
+ggplot(data = et.climate.df,
+       aes(x = mean.temp, y = random, color = location, shape = Name)) +
+  geom_point() +
+  labs(
+    title = "ET Random Component vs Monthly Average Temperature",
+    x = "Monthly Average Temperature (°F)",
+    y = "Random Component of ET (in)"
+  ) +
+  theme_classic()
 
 
-
-
-#Comparative Data Analysis----
-#Summary stat - mean
+#mean
 avg_sken_trans<-mean(sken_dec$x)
 avg_forest_trans<-mean(forest_dec$x)
 avg_urban_trans<-mean(urban_dec$x)
@@ -367,19 +585,14 @@ avg_phx_house_trans<-mean(phx_houses_dec$x)
 #Sken has mean of 2.36 inches, Forest has mean of 2.8 inches, Urban area has mean of 1.56 inches
 #Sken hence uses more water than urban areas but less than forests, showing no obvious sign of needing alot of water
 
-#Plot trend, seasonal and random patterns for the three on one graph
-
-
-
 #Golf Course vs Golf Course with Houses vs Golf Course with Desert (AZ)
-#Mean comparison
-#Decomposition of each element on one graph
+
+
 
 
 
 #Golf Course in NY vs Golf Course (No House, No Desert) in AZ 
-#Mean comparison
-#Decomposition of each element on one graph
+
 #Use air temperature and precipitation data to make sense of any randomness
 
 
