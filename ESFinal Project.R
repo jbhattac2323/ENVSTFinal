@@ -561,6 +561,7 @@ et.climate.df <- left_join(
   by = c("year", "month", "location")
 )
 
+#temperature
 ggplot(data = et.climate.df,
        aes(x = mean.temp, y = random, color = location, shape = Name)) +
   geom_point() +
@@ -571,6 +572,20 @@ ggplot(data = et.climate.df,
   ) +
   theme_classic()
 
+cor(et.climate.df$random, et.climate.df$mean.temp, use = "complete.obs")
+#cite https://www.sthda.com/english/wiki/correlation-test-between-two-variables-in-r
+
+#precipitation
+ggplot(data = et.climate.df,
+       aes(x = total.prcp, y = random, color = location, shape = Name)) +
+  geom_point() +
+  labs(
+    title = "ET Random Component vs Monthly Total Precipitation",
+    x = "Monthly Total Precipitation (inches)",
+    y = "Random Component of ET (in)"
+  ) +
+  theme_classic()
+cor(et.climate.df$random, et.climate.df$total.prcp, use = "complete.obs")
 
 #mean
 avg_sken_trans<-mean(sken_dec$x)
