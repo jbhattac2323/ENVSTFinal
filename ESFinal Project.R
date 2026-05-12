@@ -4,7 +4,7 @@ library(ggplot2)
 library(forecast)
 library(dplyr)
 
-#ET Data ----
+#Load ET Data ----
 skenandoa <- read.csv("~/Desktop/ENVSTFinalData/SkenETdata.csv")
 forest <- read.csv("~/Desktop/ENVSTFinalData/NeighbouringForestofSken.csv")
 urban <- read.csv("~/Desktop/ENVSTFinalData/NewHartfordET.csv")
@@ -14,7 +14,7 @@ phoenix_houses <- read.csv("~/Desktop/ENVSTFinalData/golfcoursewHousesPhoenix.cs
 
 head(skenandoa)
 
-#Data Wrangling----
+#Data Wrangling of ET Data----
 #Need to reformat date using Lubridate, rename columns for simplicity, and omit NA entries
 # Skenandoa Golf Course
 skenandoa <- skenandoa %>%
@@ -158,7 +158,7 @@ plot(phx_houses_dec)
 title("Phoenix Golf - Houses (AZ)", line = -1, outer = TRUE)
 
 
-#Data Wrangling (to make it ready for comparison) of Air Temp and Precipitation ----
+#Data Wrangling of Air Temp and Precipitation ----
 
 #Import daily NOAA Data for monthly air temp and precipitation to help with interpretation
 rome.full<-read.csv("~/Desktop/ENVSTFinalData/romefullupdate.csv")
@@ -253,7 +253,7 @@ ggplot(phoenix.monthly) +
   )
 #Everything seems to be right - no outliers
 
-#Make Data Frame for each region decomposition----
+#Wrangling: Data Frame for each region decomposition----
 #Cite: Help from Professor Kropp
 
 # 1. Skenandoa Golf Course
@@ -343,7 +343,7 @@ phoenix.monthly$year <- year(phoenix.monthly$year_month)
 phoenix.monthly$month <- month(phoenix.monthly$year_month)
 climate.monthly <- rbind(rome.monthly, phoenix.monthly)
 
-#Convert decomposition columns from time series to numeric----
+#Convert decomposition columns from time series to numeric
 # Skenandoa
 sken.df$seasonal <- as.numeric(sken.df$seasonal)
 sken.df$observed <- as.numeric(sken.df$observed)
@@ -588,12 +588,20 @@ ggplot(data = et.climate.df,
 cor(et.climate.df$random, et.climate.df$total.prcp, use = "complete.obs")
 
 #mean
-avg_sken_trans<-mean(sken_dec$x)
-avg_forest_trans<-mean(forest_dec$x)
-avg_urban_trans<-mean(urban_dec$x)
-avg_phx_trans<-mean(phx_ndh_dec$x)
-avg_phx_des_trans<-mean(phx_des_dec$x)
-avg_phx_house_trans<-mean(phx_houses_dec$x)
+avg_sken_trans <- mean(sken_dec$x, na.rm = TRUE)
+avg_forest_trans <- mean(forest_dec$x, na.rm = TRUE)
+avg_urban_trans <- mean(urban_dec$x, na.rm = TRUE)
+avg_phx_trans <- mean(phx_ndh_dec$x, na.rm = TRUE)
+avg_phx_des_trans <- mean(phx_des_dec$x, na.rm = TRUE)
+avg_phx_house_trans <- mean(phx_houses_dec$x, na.rm = TRUE)
+
+#standard deviation
+sd_sken_trans <- sd(sken_dec$x, na.rm = TRUE)
+sd_forest_trans <- sd(forest_dec$x, na.rm = TRUE)
+sd_urban_trans <- sd(urban_dec$x, na.rm = TRUE)
+sd_phx_trans <- sd(phx_ndh_dec$x, na.rm = TRUE)
+sd_phx_des_trans <- sd(phx_des_dec$x, na.rm = TRUE)
+sd_phx_house_trans <- sd(phx_houses_dec$x, na.rm = TRUE)
 
 #Golf Course - Sken vs Neighbouring Forest and Ubran Area (NY)
 
@@ -601,9 +609,6 @@ avg_phx_house_trans<-mean(phx_houses_dec$x)
 #Sken hence uses more water than urban areas but less than forests, showing no obvious sign of needing alot of water
 
 #Golf Course vs Golf Course with Houses vs Golf Course with Desert (AZ)
-
-
-
 
 
 #Golf Course in NY vs Golf Course (No House, No Desert) in AZ 
