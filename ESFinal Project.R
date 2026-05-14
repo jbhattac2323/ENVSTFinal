@@ -603,23 +603,23 @@ sd_phx_trans <- sd(phx_ndh_dec$x, na.rm = TRUE)
 sd_phx_des_trans <- sd(phx_des_dec$x, na.rm = TRUE)
 sd_phx_house_trans <- sd(phx_houses_dec$x, na.rm = TRUE)
 
-#Golf Course - Sken vs Neighbouring Forest and Ubran Area (NY)
-
-#Sken has mean of 2.36 inches, Forest has mean of 2.8 inches, Urban area has mean of 1.56 inches
-#Sken hence uses more water than urban areas but less than forests, showing no obvious sign of needing alot of water
-
-#Golf Course vs Golf Course with Houses vs Golf Course with Desert (AZ)
-
-
-#Golf Course in NY vs Golf Course (No House, No Desert) in AZ 
-
-#Use air temperature and precipitation data to make sense of any randomness
-
-
-#more summary stats- max ET values to help interpretation
+#more summary stats
+#max ET values to help interpretation
 max.sken <- max(sken.df$observed, na.rm = TRUE)
 max.forest<-max(forest.df$observed, na.rm = TRUE)
 max.urban<-max(urban.df$observed, na.rm = TRUE)
 max.phx.nhd<-max(phx_ndh.df$observed, na.rm = TRUE)
 max.phx.des<-max(phx_des.df$observed, na.rm = TRUE)
 max.phx.hous<-max(houses.df$observed, na.rm = TRUE)
+
+#min ET values
+min.sken <- min(sken.df$observed, na.rm = TRUE)
+min.forest <- min(forest.df$observed, na.rm = TRUE)
+min.urban <- min(urban.df$observed, na.rm = TRUE)
+min.phx.nhd <- min(phx_ndh.df$observed, na.rm = TRUE)
+min.phx.des <- min(phx_des.df$observed, na.rm = TRUE)
+min.phx.hous <- min(houses.df$observed, na.rm = TRUE)
+
+#avg daily precipitation for analysis 3
+avg.pcp.rome.inches<-mean(rome.clean$PRCP_in)
+avg.pcp.phoenix.inches<-mean(phoenix.clean$PRCP_in)
