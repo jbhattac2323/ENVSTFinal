@@ -620,6 +620,9 @@ min.phx.nhd <- min(phx_ndh.df$observed, na.rm = TRUE)
 min.phx.des <- min(phx_des.df$observed, na.rm = TRUE)
 min.phx.hous <- min(houses.df$observed, na.rm = TRUE)
 
-#avg daily precipitation for analysis 3
-avg.pcp.rome.inches<-mean(rome.clean$PRCP_in)
-avg.pcp.phoenix.inches<-mean(phoenix.clean$PRCP_in)
+#avg monthly precipitation for analysis 3
+avg_pcp_phoenix_monthly <- mean(phoenix.monthly$total.prcp, na.rm = TRUE)
+avg_pcp_rome_monthly <- mean(rome.monthly$total.prcp, na.rm = TRUE)
+
+#rome's avg monthly pcp as a multiple of phx
+multiple.pcp<-avg_pcp_rome_monthly/avg_pcp_phoenix_monthly
