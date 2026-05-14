@@ -616,9 +616,10 @@ sd_phx_house_trans <- sd(phx_houses_dec$x, na.rm = TRUE)
 #Use air temperature and precipitation data to make sense of any randomness
 
 
-
-
-
-
-
-
+#more summary stats- max ET values to help interpretation
+max.sken <- max(sken.df$observed, na.rm = TRUE)
+max.forest<-max(forest.df$observed, na.rm = TRUE)
+max.urban<-max(urban.df$observed, na.rm = TRUE)
+max.phx.nhd<-max(phx_ndh.df$observed, na.rm = TRUE)
+max.phx.des<-max(phx_des.df$observed, na.rm = TRUE)
+max.phx.hous<-max(houses.df$observed, na.rm = TRUE)
