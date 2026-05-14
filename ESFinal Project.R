@@ -382,7 +382,7 @@ phx_des.df$random <- as.numeric(phx_des.df$random)
 
 
 #Combine data + Visualistion for each analysis----
-#NY Comparison----
+#1. NY Comparison----
 ny.dec.df <- rbind(sken.df, urban.df, forest.df)
 ny.dec.df$date <- make_date( # Creating date from year and month to be able to plot
   year = ny.dec.df$year,
@@ -434,7 +434,7 @@ ggplot(data = ny.dec.df,
   ) +
   theme_classic()
 
-#AZ Comparison----
+#2. AZ Comparison----
 az.dec.df<-rbind(houses.df,phx_des.df,phx_ndh.df)
 az.dec.df$date <- make_date(
   year = az.dec.df$year,
@@ -486,7 +486,7 @@ ggplot(data = az.dec.df,
   ) +
   theme_classic()
 
-#NY vs AZ Comparison----
+#3. NY vs AZ Comparison----
 ny.az.comp.df<-rbind(sken.df,phx_ndh.df)
 ny.az.comp.df$date <- make_date(
   year = ny.az.comp.df$year,
