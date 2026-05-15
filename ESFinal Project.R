@@ -616,7 +616,6 @@ max.urban<-max(urban.df$observed, na.rm = TRUE)
 max.phx.nhd<-max(phx_ndh.df$observed, na.rm = TRUE)
 max.phx.des<-max(phx_des.df$observed, na.rm = TRUE)
 max.phx.hous<-max(houses.df$observed, na.rm = TRUE)
-
 #min ET values
 min.sken <- min(sken.df$observed, na.rm = TRUE)
 min.forest <- min(forest.df$observed, na.rm = TRUE)
