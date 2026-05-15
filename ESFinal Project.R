@@ -241,7 +241,8 @@ ggplot(phoenix.monthly) +
     title = "Monthly Average Temperature (Phoenix, AZ)",
     x = "Month",
     y = "Temperature (°F)"
-  )
+  )+
+  theme_classic()
 
 ggplot(phoenix.monthly) +
   aes(x = year_month, y = total.prcp) +
@@ -250,7 +251,8 @@ ggplot(phoenix.monthly) +
     title = "Monthly Total Precipitation (Phoenix, AZ)",
     x = "Month",
     y = "Precipitation (inches)"
-  )
+  )+
+  theme_classic()
 #Everything seems to be right - no outliers
 
 #Wrangling: Data Frame for each region decomposition----
