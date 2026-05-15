@@ -181,8 +181,6 @@ phoenix.clean <- phoenix.full %>%
   filter(!is.na(TAVG_F)) %>%
   filter(!is.na(PRCP_in))
 
-#QC: Plots to check no obvious outliers
-
 #format date as lubridate
 rome.clean$DATE.F<-ymd(rome.clean$DATE)
 phoenix.clean$DATE.F<-ymd(phoenix.clean$DATE)
@@ -208,11 +206,13 @@ phoenix.monthly <- phoenix.clean %>%
   summarise( mean.temp = mean(TAVG_F),
     total.prcp = sum(PRCP_in))
 
-#QC: Plot to check if any outlier
+#QC: Plot to check if any outlier- Ok to not format since just for rechecking- Checked with Professor
 plot(phoenix.monthly$mean.temp)
 plot(phoenix.monthly$total.prcp)
 plot(rome.monthly$mean.temp)
 plot(rome.monthly$total.prcp)
+#Nothing obviously wrong
+
 
 #Rome
 ggplot(rome.monthly) +
@@ -539,7 +539,7 @@ ggplot(data = ny.az.comp.df,
   ) +
   theme_classic()
 
-#Summary stat -----
+#Summary stats -----
 #Investigate Linear Relationship between ET and Temperature
 all.dec.df <- rbind(
   sken.df,
@@ -588,6 +588,9 @@ ggplot(data = et.climate.df,
   ) +
   theme_classic()
 cor(et.climate.df$random, et.climate.df$total.prcp, use = "complete.obs")
+
+
+#No real pattern so not mentioning in presentation
 
 #mean
 avg_sken_trans <- mean(sken_dec$x, na.rm = TRUE)
